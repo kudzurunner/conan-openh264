@@ -14,7 +14,7 @@ class Openh264Conan(ConanFile):
     description = "Open Source H.264 Codec"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
-    default_options = "shared=False"
+    default_options = "shared=True"
     generators = "pkg_config"
 
     def build_requirements(self):
