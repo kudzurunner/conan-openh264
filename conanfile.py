@@ -7,7 +7,7 @@ import shutil
 class Openh264Conan(ConanFile):
     name = "openh264"
     version = "1.9.0.1806"
-    git_hash = "425ecbb"
+    git_hash = "c81d7f6"
     license = "https://raw.githubusercontent.com/cisco/openh264/master/LICENSE"
     author = "KudzuRunner"
     url = "https://github.com/kudzurunner/conan-openh264"
@@ -55,4 +55,3 @@ class Openh264Conan(ConanFile):
         self.cpp_info.libs = ['openh264']
         if self.settings.os == "Linux":
             self.cpp_info.libs.append('pthread')
-
