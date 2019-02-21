@@ -16,6 +16,7 @@ class Openh264Conan(ConanFile):
     options = {"shared": [True, False]}
     default_options = "shared=True"
     generators = "pkg_config"
+    suffix = ""
 
     def build_requirements(self):
         self.build_requires("meson_installer/0.49.0@bincrafters/stable")
@@ -43,15 +44,22 @@ class Openh264Conan(ConanFile):
         self.copy("*.so", dst="lib", keep_path=False)
         self.copy("*openh264*.a", dst="lib", keep_path=False)
 
+        self.suffix = ("_d" if self.settings.build_type == "Debug" else "")
         if self.settings.compiler == "Visual Studio":
             with tools.chdir(os.path.join(self.package_folder, "lib")):
                 libs = glob.glob("lib*.a")
                 for lib in libs:
-                    vslib = lib[3:-2] + ".lib"
+                    vslib = lib[3:-2] + self.suffix + ".lib"
                     self.output.info('renaming %s into %s' % (lib, vslib))
                     shutil.move(lib, vslib)
+            with tools.chdir(os.path.join(self.package_folder, "bin")):
+                dlls = glob.glob("*.dll")
+                for dll in dlls:
+                    vsdll = dll[:-4] + self.suffix + ".dll"
+                    self.output.info('renaming %s into %s' % (dll, vsdll))
+                    shutil.move(dll, vsdll)
 
     def package_info(self):
-        self.cpp_info.libs = ['openh264']
+        self.cpp_info.libs = ['openh264' + self.suffix]
         if self.settings.os == "Linux":
             self.cpp_info.libs.append('pthread')
