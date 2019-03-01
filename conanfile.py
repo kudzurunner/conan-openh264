@@ -55,7 +55,7 @@ class Openh264Conan(ConanFile):
             with tools.chdir(os.path.join(self.package_folder, "bin")):
                 dlls = glob.glob("*.dll")
                 for dll in dlls:
-                    vsdll = dll[:-4] + self.suffix + ".dll"
+                    vsdll = dll[:-6] + self.suffix + ".dll"
                     self.output.info('renaming %s into %s' % (dll, vsdll))
                     shutil.move(dll, vsdll)
 
