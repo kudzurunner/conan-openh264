@@ -15,7 +15,6 @@ class Openh264Conan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=True"
-    generators = "pkg_config"
     suffix = ""
 
     def build_requirements(self):
@@ -60,6 +59,6 @@ class Openh264Conan(ConanFile):
                     shutil.move(dll, vsdll)
 
     def package_info(self):
-        self.cpp_info.libs = ['openh264' + self.suffix]
+        self.cpp_info.libs = tools.collect_libs(self)
         if self.settings.os == "Linux":
             self.cpp_info.libs.append('pthread')
