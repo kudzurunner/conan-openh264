@@ -6,8 +6,8 @@ import shutil
 
 class Openh264Conan(ConanFile):
     name = "openh264"
-    version = "1.9.0.1806"
-    git_hash = "c81d7f6"
+    version = "2.0.0.1905"
+    git_hash = "82687cc"
     license = "https://raw.githubusercontent.com/cisco/openh264/master/LICENSE"
     author = "KudzuRunner"
     url = "https://github.com/kudzurunner/conan-openh264"
@@ -18,21 +18,20 @@ class Openh264Conan(ConanFile):
     suffix = ""
 
     def build_requirements(self):
-        self.build_requires("meson_installer/0.49.0@bincrafters/stable")
+        self.build_requires("meson/0.52.1")
         if self.settings.os == "Windows":
-            self.build_requires("nasm_installer/2.13.02@bincrafters/stable")
-
+            self.build_requires("nasm/2.14")
 
     def source(self):
         git = tools.Git(folder=self.name)
         git.clone("https://github.com/cisco/openh264.git", branch="master")
         git.checkout(self.git_hash)
-        tools.replace_in_file("{}/meson.build".format(self.name), "version : '1.8.0'", "version : '1.9.0'")
+        tools.replace_in_file("{}/meson.build".format(self.name), "version : '1.8.0'", "version : '2.0.0'")
 
     def build(self):
-        args = ["--default-library={}".format("shared" if self.options.shared else "static")]
+        #args = ["--default-library={}".format("shared" if self.options.shared else "static")]
         meson = Meson(self, build_type=self.settings.build_type, backend="ninja")
-        meson.configure(source_folder=self.name, build_folder="build", args=args)
+        meson.configure(source_folder=self.name, build_folder="build")
         meson.build()
 
     def package(self):
